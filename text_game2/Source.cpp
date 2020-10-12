@@ -36,17 +36,10 @@ char cursor(int x, int y)
         return buf[0];
 }
 
-//Score
-void scorePrint(int score)
-{
-    gotoxy(65, 0);
-    setcolor(7, 0);
-    printf("Score : %d", score);
-}
-
 //Ship
 void draw_ship(int x, int y)
 {
+
     gotoxy(x, y);
     setcolor(2, 4);
     printf(" <-0-> ");
@@ -56,6 +49,42 @@ void draw_space(int x, int y)
     gotoxy(x, y);
     setcolor(0, 0);
     printf("       ");
+}
+
+//Bullet
+void draw_bullet(int x, int y)
+{
+    gotoxy(x, y);
+    setcolor(7, 0);
+    printf("|");
+}
+void del_bullet(int x, int y)
+{
+    gotoxy(x, y);
+    setcolor(0, 0);
+    printf(" ");
+}
+int bulletPrint(int* bx, int* by, int* count)
+{
+    if (*by > 0)
+    {
+        del_bullet(*bx, *by);
+        *by = *by - 1;
+        if (cursor(*bx, *by) == '*')
+        {
+            del_bullet(*bx, *by);
+            *count %= maxBullet;
+            return 0;
+        }
+        draw_bullet(*bx, *by);
+        return 1;
+    }
+    else if (*by == 0)
+    {
+        del_bullet(*bx, *by);
+        *count %= maxBullet;
+        return 0;
+    }
 }
 
 //Star
@@ -72,53 +101,13 @@ void starPrint()
     printf("*");
 }
 
-
-//Bullet
-void draw_bullet(int x, int y)
-{
-    gotoxy(x, y);
-    setcolor(7, 0);
-    printf("|");
-}
-void del_bullet(int x, int y)
-{
-    gotoxy(x, y);
-    setcolor(0, 0);
-    printf(" ");
-}
-int bulletPrint(int* bx, int* by, int* count, int* score)
-{
-    if (*by > 0)
-    {
-        del_bullet(*bx, *by);
-        *by = *by - 1;
-        if (cursor(*bx, *by) == '*')
-        {
-            del_bullet(*bx, *by);
-            starPrint();
-            *score = *score + 1;
-            *count %= maxBullet;
-            return 0;
-        }
-        draw_bullet(*bx, *by);
-        return 1;
-    }
-    else if (*by == 0)
-    {
-        del_bullet(*bx, *by);
-        *count %= maxBullet;
-        return 0;
-    }
-}
-
-
 //Main
 int main()
 {
     setcursor(0);
     int bullet[maxBullet] = { 0 }, bx[maxBullet], by[maxBullet], count = 0, move = 0;
     char ch = ' ';
-    int x = 38, y = 20, score = 0;
+    int x = 38, y = 20;
 
     srand(time(NULL));
     for (int num = 0; num < maxStar; num++)
@@ -151,11 +140,11 @@ int main()
         for (int num = 0; num < maxBullet; num++)
         {
             if (bullet[num] == 1)
-                bullet[num] = bulletPrint(&bx[num], &by[num], &count, &score);
+                bullet[num] = bulletPrint(&bx[num], &by[num], &count);
         }
 
-        scorePrint(score);
-        
+
+
         draw_space(x, y);
         x += move;
         draw_ship(x, y);
