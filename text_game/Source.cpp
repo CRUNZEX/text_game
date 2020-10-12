@@ -9,7 +9,7 @@ void gotoxy(int x, int y)
 {
     COORD c = { x, y };
     SetConsoleCursorPosition(
-        GetStdHandle(STD_OUTPUT_HANDLE), c);
+    GetStdHandle(STD_OUTPUT_HANDLE), c);
 }
 void setcursor(bool visible)
 {
@@ -72,7 +72,6 @@ void starPrint()
     printf("*");
 }
 
-
 //Bullet
 void draw_bullet(int x, int y)
 {
@@ -92,10 +91,11 @@ int bulletPrint(int* bx, int* by, int* count, int* score)
     {
         del_bullet(*bx, *by);
         *by = *by - 1;
-        if (cursor(*bx, *by) == '*')
+        if (cursor(*bx, *by) == '*') // Check Star
         {
             del_bullet(*bx, *by);
             starPrint();
+            Beep(535, 200);         // Sound
             *score = *score + 1;
             *count %= maxBullet;
             return 0;
@@ -111,8 +111,7 @@ int bulletPrint(int* bx, int* by, int* count, int* score)
     }
 }
 
-
-//Main
+    //Main
 int main()
 {
     setcursor(0);
