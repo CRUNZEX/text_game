@@ -2,8 +2,11 @@
 #include <conio.h>
 #include <windows.h>
 #include <time.h>
+
 #define maxBullet 5
 #define maxStar 20
+#define xShip 38
+#define yShip 20
 
 void gotoxy(int x, int y)
 {
@@ -95,7 +98,7 @@ int bulletPrint(int* bx, int* by, int* count, int* score)
         {
             del_bullet(*bx, *by);
             starPrint();
-            Beep(535, 200);         // Sound
+            Beep(700, 50);         // Sound
             *score = *score + 1;
             *count %= maxBullet;
             return 0;
@@ -117,13 +120,13 @@ int main()
     setcursor(0);
     int bullet[maxBullet] = { 0 }, bx[maxBullet], by[maxBullet], count = 0, move = 0;
     char ch = ' ';
-    int x = 38, y = 20, score = 0;
+    int x = xShip, y = yShip, score = 0;
 
     srand(time(NULL));
     for (int num = 0; num < maxStar; num++)
         starPrint();
 
-    draw_ship(38, 20);
+    draw_ship(xShip, yShip);
     do
     {
         if (_kbhit())
